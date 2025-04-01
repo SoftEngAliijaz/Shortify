@@ -9,14 +9,14 @@ const PORT = process.env.PORT || 3000;
 connectToDatabase("mongodb://localhost:27017/url-shortener");
 
 app.use(express.json());
+app.set("json spaces", 2);
 app.use("/url", urlRouter);
 
-app.get("/:shortId", async (req, res) => {
+app.get("/url/:shortId", async (req, res) => {
   try {
-    const shortId = req.params.shortId.trim(); // Ensure no extra spaces
+    const shortId = req.params.shortId.trim();
     console.log(`🔍 Searching for shortId: ${shortId}`);
 
-    // Fetch the entry without updating first, just to check if it exists
     const entry = await URL.findOne({ shortId });
 
     if (!entry) {
@@ -24,7 +24,6 @@ app.get("/:shortId", async (req, res) => {
       return res.status(404).json({ error: "Short URL not found" });
     }
 
-    // If found, update visit history
     await URL.updateOne(
       { shortId },
       { $push: { visitHistory: { timestamp: Date.now() } } }
