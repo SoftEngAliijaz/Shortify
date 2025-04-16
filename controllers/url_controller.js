@@ -6,7 +6,11 @@ async function handleGeneratedShortUrl(req, res) {
   try {
     let { url } = req.body;
 
-    if (!url || typeof url !== "string" || !validUrl.isUri(url)) {
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      url = `http://${url}`;
+    }
+
+    if (!validUrl.isUri(url)) {
       return res
         .status(400)
         .json({ errorMessage: "Please enter a valid URL." });
@@ -14,6 +18,14 @@ async function handleGeneratedShortUrl(req, res) {
 
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       url = `http://${url}`;
+    }
+
+    const existing = await URL.findOne({
+      redirectUrl: url,
+      createdBy: req.user ? req.user._id : null,
+    });
+    if (existing) {
+      return res.render("home", { id: existing.shortId });
     }
 
     const shortId = nanoid(8);

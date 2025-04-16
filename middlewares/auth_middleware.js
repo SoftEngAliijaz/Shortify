@@ -25,7 +25,7 @@ async function checkAuth(req, res, next) {
   if (!user) {
     return res.redirect("/login");
   }
-  user;
+  req.user = user;
   next();
 }
 
