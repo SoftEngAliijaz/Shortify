@@ -21,7 +21,9 @@ async function handleGeneratedShortUrl(req, res) {
       visitHistory: [],
     });
 
-    return res.status(201).json({ shortId: newUrl.shortId });
+    return res.render("home", { id: newUrl.shortId });
+
+    // return res.status(201).json({ shortId: newUrl.shortId });
   } catch (error) {
     console.error("Error generating short URL:", error);
     res.status(500).json({ errorMessage: "Internal server error" });
