@@ -3,21 +3,14 @@ const URL = require("../models/url_model");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+  if (!req.user) return res.redirect("/login");
   try {
-    const allUrls = await URL.find({});
+    const allUrls = await URL.find({ createdBy: req.user._id });
     return res.render("home", { urls: allUrls });
   } catch (err) {
     console.error("Error fetching URLs:", err);
     return res.status(500).send("Internal Server Error");
   }
-});
-
-router.get("/signup", (req, res) => {
-  return res.render("signup");
-});
-
-router.get("/login", (req, res) => {
-  return res.render("login");
 });
 
 module.exports = router;

@@ -158,6 +158,13 @@
     <body>
         <h1>🔗 Shortify - URL Shortener</h1>
 
+        <nav style="text-align: right; margin: 1rem 2rem;">
+            <form method="POST" action="/user/logout">
+                <button type="submit" style="padding: 6px 12px;">Logout</button>
+            </form>
+        </nav>
+
+
         <% if (locals.id) { %>
             <div class="generated-url">
                 <p>
