@@ -8,7 +8,100 @@
 
         <style>
             body {
-                font-family: 'Courier New', Courier, monospace;
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                margin-top: 20px;
+                color: #4CAF50;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 20px auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+            }
+
+            label {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 1em;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            table {
+                width: 90%;
+                margin: 20px auto;
+                border-collapse: collapse;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            th,
+            td {
+                padding: 10px;
+                text-align: center;
+                border: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            a {
+                color: #4CAF50;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .generated-url {
+                text-align: center;
+                margin: 20px auto;
+                padding: 10px;
+                background: #e8f5e9;
+                border: 1px solid #c8e6c9;
+                border-radius: 8px;
+                width: fit-content;
             }
         </style>
     </head>
@@ -16,16 +109,53 @@
     <body>
         <h1>Url Shortener</h1>
         <% if (locals.id) { %>
-            <p>Your Generated Url is : <a target="_blank"
-                    href="http://localhost:3000/url/<%= id %>">http://localhost:3000/url/<%= id %>
-                </a>
-            </p>
+            <div class="generated-url">
+                <p>Your Generated Url is: <a target="_blank" href="http://localhost:3000/url/<%= id %>">
+                        http://localhost:3000/url/<%= id %>
+                    </a>
+                </p>
+            </div>
             <% } %>
-                <form method="post" action="/url">
-                    <label for="">Enter Your Original Url</label>
-                    <input type="text" name="url" id="url" placeholder="Enter your url here" required>
-                    <button type="submit">Generate</button>
-                </form>
+                <div>
+                    <form method="post" action="/url">
+                        <label for="url">Enter Your Original Url</label>
+                        <input type="text" name="url" id="url" placeholder="Enter your url here" required>
+                        <button type="submit">Generate</button>
+                    </form>
+                </div>
+
+                <div>
+                    <% if (locals.urls) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>S. Number</th>
+                                    <th>Short ID</th>
+                                    <th>Redirect</th>
+                                    <th>Clicks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% urls.forEach((url, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= url.shortId %>
+                                        </td>
+                                        <td><a href="<%= url.redirectUrl %>" target="_blank">
+                                                <%= url.redirectUrl %>
+                                            </a></td>
+                                        <td>
+                                            <%= url.visitHistory.length %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                        <% } %>
+                </div>
     </body>
 
 </html>
