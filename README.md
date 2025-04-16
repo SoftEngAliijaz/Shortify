@@ -162,5 +162,3 @@ Licensed under the [MIT License](LICENSE).
 
 > Built with 💚 using Node.js + MongoDB.
 ```
-
----
