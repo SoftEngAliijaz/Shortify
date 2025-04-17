@@ -7,9 +7,9 @@ const {
   trackAndRedirect,
 } = require("../controllers/url_controller");
 
-router.post("/", handleGeneratedShortUrl); // Create short URL
-router.get("/analytics/:shortId", handleGetAnalytics); // Analytics by shortId
-router.get("/getAllUrls", handleGetAllUrls); // All stored URLs
-router.get("/:shortId", trackAndRedirect); // Redirection
+router.post("/", handleGeneratedShortUrl);
+router.get("/analytics/:shortId", handleGetAnalytics);
+router.get("/getAllUrls", handleGetAllUrls);
+router.get("/:shortId", trackAndRedirect);
 
 module.exports = router;

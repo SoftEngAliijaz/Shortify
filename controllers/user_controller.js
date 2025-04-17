@@ -1,16 +1,14 @@
 const { v4: uuidV4 } = require("uuid");
 const User = require("../models/user");
-
 const { setUser } = require("../services/authService");
 
 async function handleUserSignUp(req, res) {
   try {
     const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
     });
     if (!newUser) return res.render("error404");
     return res.render("home");
@@ -29,13 +27,15 @@ async function handleUserLogin(req, res) {
 
   const sessionId = uuidV4();
   setUser(sessionId, user);
+
   res.cookie("uid", sessionId);
+  req.user = user;
+
   return res.redirect("/home");
 }
 
 async function handleUserLogOut(req, res) {
   const sessionId = req.cookies.uid;
-  const { setUser } = require("../services/authService");
   setUser(sessionId, null);
   res.clearCookie("uid");
   res.redirect("/login");

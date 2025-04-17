@@ -16,10 +16,6 @@ async function handleGeneratedShortUrl(req, res) {
         .json({ errorMessage: "Please enter a valid URL." });
     }
 
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      url = `http://${url}`;
-    }
-
     const existing = await URL.findOne({
       redirectUrl: url,
       createdBy: req.user ? req.user._id : null,
