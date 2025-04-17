@@ -33,7 +33,16 @@ async function handleUserLogin(req, res) {
   return res.render("home");
 }
 
+async function handleUserLogOut(req, res) {
+  const sessionId = req.cookies.uid;
+  const { setUser } = require("../services/authService");
+  setUser(sessionId, null);
+  res.clearCookie("uid");
+  res.redirect("/login");
+}
+
 module.exports = {
   handleUserSignUp,
   handleUserLogin,
+  handleUserLogOut,
 };

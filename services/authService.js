@@ -11,4 +11,5 @@ function getUser(sessionId) {
 module.exports = {
   setUser,
   getUser,
+  sessionIdToUserMap,
 };

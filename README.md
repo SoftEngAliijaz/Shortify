@@ -3,7 +3,7 @@
 
 A clean, minimal, and powerful URL shortener built with **Node.js**, **Express**, and **MongoDB**.
 
-Turn long, clunky URLs into short, shareable links while tracking visits — all with a simple API or user-friendly web interface.
+Turn long, clunky URLs into short, shareable links while tracking visits — all via a simple API or a user-friendly web interface.
 
 ---
 
@@ -60,22 +60,45 @@ Visit: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📌 API Endpoints
+## 🔧 Routes and Endpoints Overview
 
-All API routes are prefixed with `/url`
+### 📌 1. Static Routes (Public)
+Handled by: `staticRouter`
 
-| Method | Endpoint                         | Description                                  |
-|--------|----------------------------------|----------------------------------------------|
-| POST   | `/url`                           | Create a new short URL                       |
-| GET    | `/url/getAllUrls`                | Fetch all stored short URLs                  |
-| GET    | `/url/analytics/:shortId`        | Get analytics for a specific short URL       |
-| GET    | `/url/:shortId`                  | Redirect to the original long URL            |
+| Method | Path        | Description                          |
+|--------|-------------|--------------------------------------|
+| GET    | `/login`    | Show login form (`login.ejs`)        |
+| GET    | `/signup`   | Show signup form (`signup.ejs`)      |
+| GET    | `/`         | Home page (requires auth, shows URLs) |
 
 ---
 
-### 📤 POST `/url`
+### 📌 2. User Auth Routes
+Handled by: `userRouter` (prefix: `/user`)
 
-**Shorten a long URL.**
+| Method | Path          | Description              |
+|--------|---------------|--------------------------|
+| POST   | `/signup`     | Register a new user      |
+| POST   | `/login`      | Log in an existing user  |
+| POST   | `/logout`     | Log out the current user |
+
+---
+
+### 📌 3. URL Shortener Routes
+Handled by: `urlRouter` (prefix: `/url`)
+
+| Method | Path                    | Description                                |
+|--------|-------------------------|--------------------------------------------|
+| POST   | `/`                     | Create a new short URL                     |
+| GET    | `/analytics/:shortId`  | Get analytics for a specific short URL     |
+| GET    | `/getAllUrls`          | Fetch all stored short URLs (optional)     |
+| GET    | `/:shortId`            | Redirect to the original long URL          |
+
+---
+
+## 📤 Example: Create Short URL (API)
+
+**POST `/url`**
 
 #### Request Body
 
@@ -95,18 +118,18 @@ All API routes are prefixed with `/url`
 
 ---
 
-### 🔁 GET `/url/:shortId`
+## 🔁 Example: Redirect to Original URL
 
-**Redirect to the original long URL.**
+**GET `/url/:shortId`**
 
 Example:  
 Visiting `http://localhost:3000/url/abcdef12` redirects to `https://www.example.com`.
 
 ---
 
-### 📊 GET `/url/analytics/:shortId`
+## 📊 Example: URL Analytics
 
-**Get analytics for a short URL.**
+**GET `/url/analytics/:shortId`**
 
 #### Response
 
@@ -122,26 +145,31 @@ Visiting `http://localhost:3000/url/abcdef12` redirects to `https://www.example.
 
 ---
 
-## 🧪 Example Usage (UI)
+## 🧪 Using the UI
 
-Go to the root URL `/`, paste your long link in the form, and hit **Generate**.  
-You'll receive a shortened version below the form and a table with all generated URLs and click counts.
+Go to the root URL `/`, paste your long link in the form, and click **Generate**.  
+You'll see:
+
+- A shortened version of your link
+- A table showing all generated URLs
+- Click counts for each link
 
 ---
 
 ## 🛠️ Planned Enhancements
 
-- ✏️ **Custom short URL aliases**
-- 🔒 **User authentication** to manage personal links
-- 🗓️ **Expiration support** for temporary links
-- 📈 **Admin dashboard** for managing and tracking all URLs
-- 📤 **Export analytics** as CSV
+- ✏️ Custom short URL aliases
+- 🔒 User authentication to manage personal links
+- 🗓️ Expiration support for temporary links
+- 📈 Admin dashboard for managing and tracking all URLs
+- 📤 Export analytics as CSV
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions!  
+We welcome contributions!
+
 To contribute:
 
 1. Fork this repo
@@ -150,7 +178,7 @@ To contribute:
 4. Push to your fork
 5. Submit a pull request
 
-Please follow the coding standards and include comments/test cases where applicable.
+Please follow the coding standards and include comments or test cases where applicable.
 
 ---
 
