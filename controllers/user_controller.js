@@ -20,13 +20,17 @@ async function handleUserSignUp(req, res) {
 
 async function handleUserLogin(req, res) {
   const { email, password } = req.body;
+
   const user = await User.findOne({ email, password });
   if (!user) {
+    console.log("Invalid credentials"); // Debugging: Invalid login attempt
     return res.render("error404");
   }
 
   const sessionId = uuidV4();
   setUser(sessionId, user);
+
+  console.log("User logged in:", user);
 
   res.cookie("uid", sessionId);
   req.user = user;

@@ -4,7 +4,8 @@ function setUser(sessionId, user) {
   sessionIdToUserMap.set(sessionId, user);
 }
 
-function getUser(sessionId) {
+async function getUser(sessionId) {
+  console.log("Session ID:", sessionId); // Debugging line
   return sessionIdToUserMap.get(sessionId);
 }
 
