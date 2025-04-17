@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+  </head>
+  <body>
+    <h1>Signup</h1>
+    <form action="/user" method="post">
+      <label>Full Name</label>
+      <input type="text" required name="name" />
+      <label>Email</label>
+      <input type="text" required name="email" />
+      <label>Password</label>
+      <input type="text" required name="password" />
 
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Sign Up</title>
-        <link rel="stylesheet" href="/css/signup.css" />
-    </head>
-
-    <body>
-        <div class="signup-container">
-            <h1>Shortify Sign Up</h1>
-            <form action="/user/signup" method="post">
-                <label for="name">Full Name</label>
-                <input type="text" name="name" id="name" required />
-
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required />
-
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" required />
-
-                <button type="submit">Sign Up</button>
-            </form>
-            <p class="redirect">
-                Already have an account? <a href="/login">Login here</a>
-            </p>
-        </div>
-    </body>
-
+      <button type="submit">Signup</button>
+    </form>
+  </body>
 </html>

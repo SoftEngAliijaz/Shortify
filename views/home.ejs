@@ -1,90 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <h1>URL Shortener</h1>
+    <% if (locals.id) { %>
+    <p>URL Generated: http://localhost:8001/url/<%= id %></p>
+    <% } %>
 
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Shortify - URL Shortener</title>
-        <link rel="stylesheet" href="/css/home.css" />
-    </head>
-
-    <body>
-        <h1>🔗 Shortify - URL Shortener</h1>
-
-        <% if (user) { %>
-            <p style="margin-left: 2rem">Welcome, <%= user.name %> 👋</p>
-            <% } %>
-                <!-- Display newly created Short URL if 'id' is present in the query string -->
-                <% if (locals.id) { %>
-                    <div class="generated-url">
-                        <p>
-                            Your New Short URL:<br />
-                            <a target="_blank" href="/url/<%= id %>">
-                                <%= req.protocol + '://' + req.headers.host + '/url/' + id %>
-                            </a>
-                        </p>
-                    </div>
-                    <% } %>
-
-                        <!-- URL Shortener Form -->
-                        <div>
-                            <form method="POST" action="/url">
-                                <label for="url">Enter a Long URL</label>
-                                <input type="text" name="url" id="url" placeholder="https://example.com/long-url-path"
-                                    required />
-                                <button type="submit">Generate Short Link</button>
-                            </form>
-                        </div>
-
-                        <!-- Display All Short URLs -->
-                        <% if (locals.urls && locals.urls.length> 0) { %>
-                            <div style="margin-top: 2rem">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Short ID</th>
-                                            <th>Original URL</th>
-                                            <th>Clicks</th>
-                                            <th>Redirect Link</th>
-                                            <th>Analytics</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% urls.forEach((url, index)=> { %>
-                                            <tr>
-                                                <td>
-                                                    <%= index + 1 %>
-                                                </td>
-                                                <td>
-                                                    <%= url.shortId %>
-                                                </td>
-                                                <td>
-                                                    <a href="<%= url.redirectUrl %>" target="_blank">
-                                                        <%= url.redirectUrl %>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <%= url.visitHistory.length %>
-                                                </td>
-                                                <td>
-                                                    <a href="/url/<%= url.shortId %>" target="_blank">
-                                                        <%= req.protocol + '://' + req.headers.host + '/url/' +
-                                                            url.shortId %>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a href="/url/analytics/<%= url.shortId %>">View
-                                                        Analytics</a>
-                                                </td>
-                                            </tr>
-                                            <% }); %>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <% } else { %>
-                                <p style="margin-left: 2rem">No URLs created yet.</p>
-                                <% } %>
-    </body>
-
+    <div>
+      <form method="POST" action="/url">
+        <label>Enter Your Original URL</label>
+        <input type="text" name="url" placeholder="https://example.com" />
+        <button type="submit">Generate</button>
+      </form>
+    </div>
+    <div style="margin-top: 30px">
+      <% if (locals.urls) { %>
+      <table>
+        <thead>
+          <th>S. No</th>
+          <th>ShortID</th>
+          <th>Redirect</th>
+          <th>Clicks</th>
+        </thead>
+        <tbody>
+          <% urls.forEach((url, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= url.shortId %></td>
+            <td><%= url.redirectURL %></td>
+            <td><%= url.visitHistory.length %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </body>
 </html>

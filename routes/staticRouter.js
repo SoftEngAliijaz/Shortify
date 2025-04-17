@@ -1,33 +1,22 @@
 const express = require("express");
+const URL = require("../models/url");
+
 const router = express.Router();
-const { checkAuth } = require("../middlewares/auth_middleware");
 
-router.get("/", checkAuth, async (req, res) => {
-  try {
-    const urls = await URL.find({ createdBy: req.user._id });
-    const newShortId = req.query.newShortId || null;
-    res.render("home", {
-      user: req.user,
-      urls,
-      newShortId,
-      errorMessage: null,
-    });
-  } catch (error) {
-    console.error("Error fetching URLs:", error);
-    res.status(500).json({ errorMessage: "Internal server error" });
-  }
-});
-
-router.get("/login", (req, res) => {
-  res.render("login");
+router.get("/", async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  const allurls = await URL.find({ createdBy: req.user._id });
+  return res.render("home", {
+    urls: allurls,
+  });
 });
 
 router.get("/signup", (req, res) => {
-  res.render("signup");
+  return res.render("signup");
 });
 
-router.get("/home", checkAuth, (req, res) => {
-  res.render("home", { user: req.user });
+router.get("/login", (req, res) => {
+  return res.render("login");
 });
 
 module.exports = router;
