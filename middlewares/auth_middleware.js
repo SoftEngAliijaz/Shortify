@@ -1,4 +1,5 @@
 const { getUser } = require("../services/authService.js");
+const { sessionIdToUserMap } = require("../services/authService");
 
 async function restrictToUserLoggedInOnly(req, res, next) {
   const userUid = req.cookies.uid;
@@ -6,6 +7,7 @@ async function restrictToUserLoggedInOnly(req, res, next) {
   if (!userUid) {
     return res.redirect("/login");
   }
+
   const user = await getUser(userUid);
 
   if (!user) {
@@ -16,17 +18,18 @@ async function restrictToUserLoggedInOnly(req, res, next) {
   next();
 }
 
-async function checkAuth(req, res, next) {
-  if (!req.cookies.uid) {
-    return res.redirect("/login");
-  }
-  const userId = req.cookies.uid;
-  const user = await getUser(userId);
-  if (!user) {
-    return res.redirect("/login");
-  }
+function checkAuth(req, res, next) {
+  const sessionId = req.cookies?.uid;
+  if (!sessionId) return res.redirect("/login");
+
+  const user = sessionIdToUserMap.get(sessionId);
+  if (!user) return res.redirect("/login");
+
   req.user = user;
   next();
 }
 
-module.exports = { restrictToUserLoggedInOnly, checkAuth };
+module.exports = {
+  restrictToUserLoggedInOnly,
+  checkAuth,
+};
