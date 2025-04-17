@@ -11,19 +11,31 @@ async function handleGeneratedShortUrl(req, res) {
     }
 
     if (!validUrl.isUri(url)) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter a valid URL." });
+      return res.render("home", {
+        errorMessage: "Please enter a valid URL.",
+        user: req.user,
+        urls: await URL.find({ createdBy: req.user ? req.user._id : null }),
+      });
     }
 
+    // Check if URL already exists for this user
     const existing = await URL.findOne({
       redirectUrl: url,
       createdBy: req.user ? req.user._id : null,
     });
+
     if (existing) {
-      return res.render("home", { id: existing.shortId });
+      const urls = await URL.find({
+        createdBy: req.user ? req.user._id : null,
+      });
+      return res.render("home", {
+        newShortId: existing.shortId,
+        user: req.user,
+        urls,
+      });
     }
 
+    // Create new short URL
     const shortId = nanoid(8);
     const newUrl = await URL.create({
       shortId,
@@ -32,10 +44,19 @@ async function handleGeneratedShortUrl(req, res) {
       createdBy: req.user ? req.user._id : null,
     });
 
-    return res.render("home", { id: newUrl.shortId });
+    const urls = await URL.find({ createdBy: req.user ? req.user._id : null });
+    return res.render("home", {
+      newShortId: newUrl.shortId,
+      user: req.user,
+      urls,
+    });
   } catch (error) {
     console.error("Error generating short URL:", error);
-    res.status(500).json({ errorMessage: "Internal server error" });
+    res.status(500).render("home", {
+      errorMessage: "Internal server error",
+      user: req.user,
+      urls: [],
+    });
   }
 }
 
@@ -60,7 +81,7 @@ async function handleGetAnalytics(req, res) {
 
 async function handleGetAllUrls(req, res) {
   try {
-    const urls = await URL.find({});
+    const urls = await URL.find({ createdBy: req.user._id });
 
     return res.status(200).json({
       message: "URLs fetched successfully",

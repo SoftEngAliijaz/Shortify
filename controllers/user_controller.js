@@ -4,13 +4,9 @@ const { setUser } = require("../services/authService");
 async function handleUserSignUp(req, res) {
   try {
     const { name, email, password } = req.body;
-    const newUser = await User.create({
-      name,
-      email,
-      password,
-    });
+    const newUser = await User.create({ name, email, password });
     if (!newUser) return res.render("error404");
-    return res.render("home");
+    return res.redirect("/login");
   } catch (error) {
     console.error("Signup Error:", error);
     return res.status(500).render("error404");
@@ -19,17 +15,17 @@ async function handleUserSignUp(req, res) {
 
 async function handleUserLogin(req, res) {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email, password });
+
   if (!user) {
     console.log("Invalid credentials");
-    return res.render("error404");
+    return res.render("login", { error: "Invalid email or password" });
   }
 
   const token = setUser(user);
   res.cookie("uid", token);
   console.log("User logged in:", user);
-  return res.redirect("/");
+  return res.redirect("/home");
 }
 
 async function handleUserLogOut(req, res) {
@@ -38,8 +34,8 @@ async function handleUserLogOut(req, res) {
       console.error("Error logging out:", err);
       return res.status(500).render("error404");
     }
-    res.clearCookie("uid"); // Clear session cookie
-    res.redirect("/login");
+    res.clearCookie("uid");
+    return res.redirect("/login");
   });
 }
 
