@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const URL = require("../models/url_model");
+const nanoid = require("nanoid");
 const { checkAuth } = require("../middlewares/auth_middleware");
 
 router.get("/home", checkAuth, async (req, res) => {
   try {
     const allUrls = await URL.find({ createdBy: req.user._id });
-    return res.render("home", { user: req.user, urls: allUrls });
+    return res.render("home", {
+      user: req.user,
+      urls: allUrls,
+      id: req.query.id || null,
+    });
   } catch (err) {
     console.error("Error fetching URLs:", err);
     return res.status(500).send("Internal Server Error");
@@ -35,7 +40,7 @@ router.post("/", checkAuth, async (req, res) => {
 
   try {
     await newUrl.save();
-    res.redirect(`/?id=${newShortId}`);
+    res.redirect(`/url/home?id=${locals.id}`);
   } catch (err) {
     console.error("Error saving URL:", err);
     res.status(500).render("home", {

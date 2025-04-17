@@ -8,34 +8,38 @@ const session = require("express-session");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Connect DB
+// Connect to the database
 require("./config")("mongodb://localhost:27017/url-shortener");
 
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// Middleware setup
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+app.use(cookieParser()); // Parse cookies
 app.use(
   session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { httpOnly: true, maxAge: 86400000 },
+    secret: "your-secret-key", // Secret key for session encryption
+    resave: false, // Do not save session if unmodified
+    saveUninitialized: true, // Save uninitialized sessions
+    cookie: { httpOnly: true, maxAge: 86400000 }, // Cookie settings
   })
 );
 
-// Views
-app.set("view engine", "ejs");
-app.set("views", path.resolve("./views"));
+// View engine setup
+app.set("view engine", "ejs"); // Set EJS as the view engine
+app.set("views", path.resolve("./views")); // Set the views directory
 
-// Static
+// Serve static files
 app.use(express.static(path.resolve(__dirname, "public")));
 
-// Routers
-app.use("/url", urlRouter);
-app.use("/user", userRouter);
-app.use("/", staticRouter);
+// Route setup
+app.get("/", (req, res) => {
+  res.redirect("/url/home"); // Redirect root to /url/home
+});
+app.use("/url", urlRouter); // URL-related routes
+app.use("/user", userRouter); // User-related routes
+app.use("/", staticRouter); // Static file routes
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
