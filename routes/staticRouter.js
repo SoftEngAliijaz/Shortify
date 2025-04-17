@@ -10,7 +10,7 @@ router.get("/home", checkAuth, async (req, res) => {
 
   try {
     const allUrls = await URL.find({ createdBy: req.user._id });
-    return res.render("/home", { user: req.user, urls: allUrls });
+    return res.render("home", { user: req.user, urls: allUrls });
   } catch (err) {
     console.error("Error fetching URLs:", err);
     return res.status(500).send("Internal Server Error");

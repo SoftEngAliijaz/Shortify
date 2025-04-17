@@ -18,19 +18,12 @@ async function restrictToUserLoggedInOnly(req, res, next) {
 }
 
 async function checkAuth(req, res, next) {
-  const sessionId = req.cookies?.uid;
-  if (!sessionId) {
-    console.log("No session ID found. Redirecting to login.");
+  if (!req.session.user) {
+    console.log("No session found. Redirecting to login.");
     return res.redirect("/login");
   }
 
-  const user = await getUser(sessionId);
-  if (!user) {
-    console.log("User not found. Redirecting to login.");
-    return res.redirect("/login");
-  }
-
-  req.user = user;
+  req.user = req.session.user; // Access user data from session
   next();
 }
 

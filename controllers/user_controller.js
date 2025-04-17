@@ -1,6 +1,4 @@
-const { v4: uuidV4 } = require("uuid");
 const User = require("../models/user");
-const { setUser } = require("../services/authService");
 
 async function handleUserSignUp(req, res) {
   try {
@@ -23,26 +21,25 @@ async function handleUserLogin(req, res) {
 
   const user = await User.findOne({ email, password });
   if (!user) {
-    console.log("Invalid credentials"); // Debugging: Invalid login attempt
+    console.log("Invalid credentials");
     return res.render("error404");
   }
 
-  const sessionId = uuidV4();
-  setUser(sessionId, user);
-
+  req.session.user = user; // Save user info in session
   console.log("User logged in:", user);
-
-  res.cookie("uid", sessionId);
-  req.user = user;
 
   return res.redirect("/home");
 }
 
 async function handleUserLogOut(req, res) {
-  const sessionId = req.cookies.uid;
-  setUser(sessionId, null);
-  res.clearCookie("uid");
-  res.redirect("/login");
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error logging out:", err);
+      return res.status(500).render("error404");
+    }
+    res.clearCookie("connect.sid"); // Clear session cookie
+    res.redirect("/login");
+  });
 }
 
 module.exports = {
