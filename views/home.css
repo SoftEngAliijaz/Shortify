@@ -1,0 +1,144 @@
+:root {
+  --primary: #4caf50;
+  --primary-dark: #388e3c;
+  --bg-light: #f4f4f9;
+  --bg-white: #ffffff;
+  --text-color: #333;
+  --accent: #e8f5e9;
+  --accent-border: #c8e6c9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 2.5rem;
+  color: var(--primary);
+}
+
+form {
+  background: var(--bg-white);
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+form:hover {
+  transform: scale(1.01);
+}
+
+label {
+  font-size: 1.1em;
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+}
+
+button {
+  padding: 12px 24px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--primary-dark);
+}
+
+.generated-url {
+  text-align: center;
+  margin: 20px auto;
+  padding: 12px 20px;
+  background: var(--accent);
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  max-width: fit-content;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table {
+  width: 95%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background: var(--bg-white);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: var(--primary);
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+a {
+  color: var(--primary-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  form,
+  table {
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
