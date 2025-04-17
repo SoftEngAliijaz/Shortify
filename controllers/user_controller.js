@@ -30,7 +30,7 @@ async function handleUserLogin(req, res) {
   const sessionId = uuidV4();
   setUser(sessionId, user);
   res.cookie("uid", sessionId);
-  return res.render("home");
+  return res.redirect("/home");
 }
 
 async function handleUserLogOut(req, res) {
