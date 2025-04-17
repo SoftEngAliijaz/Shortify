@@ -1,29 +1,37 @@
-const { getUser } = require("../services/authService.js");
+const { getUser } = require("../services/authService");
 
 async function restrictToUserLoggedInOnly(req, res, next) {
-  const userUid = req.cookies.uid;
+  const token = req.cookies.uid;
 
-  if (!userUid) {
+  if (!token) {
     return res.redirect("/login");
   }
 
-  const user = await getUser(userUid);
+  try {
+    const user = getUser(token);
+    if (!user) {
+      return res.redirect("/login");
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    console.log("JWT error:", err.message);
+    return res.redirect("/login");
+  }
+}
 
+async function checkAuth(req, res, next) {
+  const token = req.cookies.uid;
+  if (!token) {
+    return res.redirect("/login");
+  }
+
+  const user = getUser(token);
   if (!user) {
     return res.redirect("/login");
   }
 
   req.user = user;
-  next();
-}
-
-async function checkAuth(req, res, next) {
-  if (!req.session.user) {
-    console.log("No session found. Redirecting to login.");
-    return res.redirect("/login");
-  }
-
-  req.user = req.session.user; // Access user data from session
   next();
 }
 

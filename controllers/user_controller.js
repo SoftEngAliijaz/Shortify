@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { setUser } = require("../services/authService");
 
 async function handleUserSignUp(req, res) {
   try {
@@ -25,10 +26,10 @@ async function handleUserLogin(req, res) {
     return res.render("error404");
   }
 
-  req.session.user = user; // Save user info in session
+  const token = setUser(user);
+  res.cookie("uid", token);
   console.log("User logged in:", user);
-
-  return res.redirect("/home");
+  return res.redirect("/");
 }
 
 async function handleUserLogOut(req, res) {
@@ -37,7 +38,7 @@ async function handleUserLogOut(req, res) {
       console.error("Error logging out:", err);
       return res.status(500).render("error404");
     }
-    res.clearCookie("connect.sid"); // Clear session cookie
+    res.clearCookie("uid"); // Clear session cookie
     res.redirect("/login");
   });
 }
